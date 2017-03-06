@@ -75,6 +75,7 @@ except ImportError:
     import xml.etree.ElementTree as ET
 import numpy as np
 from scipy import sparse
+from sklearn import linear_model
 
 import util
 
@@ -245,9 +246,10 @@ def main():
     
     # TODO train here, and learn your classification parameters
     print "learning..."
-    learned_W = np.random.random((len(global_feat_dict),len(util.malware_classes)))
+    #learned_W = np.random.random((len(global_feat_dict),len(util.malware_classes)))
+    logreg = linear_model.LogisticRegression()
+    logreg.fit(X_train, t_train)
     print "done learning"
-    print
     
     # get rid of training data and load test data
     del X_train
@@ -260,7 +262,7 @@ def main():
     
     # TODO make predictions on text data and write them out
     print "making predictions..."
-    preds = np.argmax(X_test.dot(learned_W),axis=1)
+    preds = logreg.predict(X_test)
     print "done making predictions"
     print
     
